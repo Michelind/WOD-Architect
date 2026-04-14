@@ -4359,42 +4359,32 @@ function closeChartFullscreen() {
    PWA — Service Worker + Install Banner
 ════════════════════════════════════════════════════ */
 
-// Service Worker Registration
+console.log('🚀 PWA script loaded — registration block starting...');
+
 if ('serviceWorker' in navigator) {
+  console.log('🔧 Service Worker is supported in this browser');
   window.addEventListener('load', () => {
+    console.log('📌 Window loaded — now registering SW...');
     navigator.serviceWorker.register('./sw.js')
       .then(reg => {
-        console.log('✅ Service Worker registered with scope:', reg.scope);
-        reg.addEventListener('updatefound', () => {
-          const newWorker = reg.installing;
-          newWorker.addEventListener('statechange', () => {
-            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-              if (confirm('New version of WOD Architect available! Reload now?')) {
-                window.location.reload();
-              }
-            }
-          });
-        });
+        console.log('✅ SUCCESS: Service Worker registered with scope:', reg.scope);
       })
-      .catch(err => console.warn('Service Worker registration failed:', err));
+      .catch(err => {
+        console.error('❌ FAILED to register Service Worker:', err);
+      });
   });
+} else {
+  console.warn('⚠️ Service Worker is NOT supported in this browser');
 }
 
-// Install banner
+// Install banner (kept simple)
 let dip = null;
 window.addEventListener('beforeinstallprompt', e => {
-  e.preventDefault(); dip = e;
-  setTimeout(() => {
-    if (dip && !window.matchMedia('(display-mode: standalone)').matches) {
-      const b = document.createElement('div'); b.id = 'install-banner';
-      b.innerHTML = '📲 Add to Home Screen';
-      b.onclick = () => { dip.prompt(); dip.userChoice.then(() => { dip = null; b.remove(); }); };
-      document.body.appendChild(b);
-      setTimeout(() => { if (b.parentNode) b.remove(); }, 8000);
-    }
-  }, 3000);
+  e.preventDefault();
+  dip = e;
+  console.log('📲 Install prompt available');
 });
-
+  
 /* ════════════════════════════════════════════════════
    INIT
 ════════════════════════════════════════════════════ */
