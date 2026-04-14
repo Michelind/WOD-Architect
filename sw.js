@@ -1,5 +1,6 @@
 // WOD Architect — Service Worker v4
-const CACHE = 'wod-architect-v4';
+// Force update - v5
+const CACHE = 'wod-architect-v5';
 const SHELL = ['./index.html', './manifest.json'];
 
 self.addEventListener('install', e => {
