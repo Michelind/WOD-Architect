@@ -4375,25 +4375,31 @@ if ('serviceWorker' in navigator) {
           });
         });
       })
-      .catch(err => console.warn('Service Worker registration failed:', err));
+      .catch(err => console.error('Service Worker registration failed:', err));
   });
 }
 
 // Install banner
 let dip = null;
 window.addEventListener('beforeinstallprompt', e => {
-  e.preventDefault(); dip = e;
+  e.preventDefault(); 
+  dip = e;
   setTimeout(() => {
     if (dip && !window.matchMedia('(display-mode: standalone)').matches) {
-      const b = document.createElement('div'); b.id = 'install-banner';
+      const b = document.createElement('div'); 
+      b.id = 'install-banner';
       b.innerHTML = '📲 Add to Home Screen';
-      b.onclick = () => { dip.prompt(); dip.userChoice.then(() => { dip = null; b.remove(); }); };
+      b.style.cssText = 'position:fixed;bottom:calc(var(--tab-h) + 14px);left:50%;transform:translateX(-50%);background:var(--brand);color:white;padding:11px 22px;border-radius:30px;font-weight:800;font-size:.84rem;cursor:pointer;z-index:99999;box-shadow:0 4px 20px rgba(0,0,0,.35);white-space:nowrap;';
+      b.onclick = () => { 
+        dip.prompt(); 
+        dip.userChoice.then(() => { dip = null; b.remove(); }); 
+      };
       document.body.appendChild(b);
       setTimeout(() => { if (b.parentNode) b.remove(); }, 8000);
     }
   }, 3000);
 });
-
+  
 /* ════════════════════════════════════════════════════
    INIT
 ════════════════════════════════════════════════════ */
